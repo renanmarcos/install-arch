@@ -1,5 +1,5 @@
 # Load the keyboard mapping:
-# (you can change to your country, like de-latin)
+(you can change to your country, like de-latin)
 
 loadkeys br-abnt2
 
@@ -32,9 +32,9 @@ mount /dev/sdaX /mnt
 
 
 # Edit the mirrorlist and put the nearby server at the beggining:
-## Go to the nearby server, use "CTRL + K" to cut
-## and "CTRL + U" to paste at top. Save with "CTRL + O" and closes
-## with "CTRL + X"
+Go to the nearby server, use "CTRL + K" to cut
+and "CTRL + U" to paste at top. Save with "CTRL + O" and closes
+with "CTRL + X"
 
 nano /etc/pacman.d/mirrorlist
 
