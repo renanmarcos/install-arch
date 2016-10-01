@@ -62,8 +62,12 @@ arch-chroot /mnt
 # Download and run the script:
 
 pacman -Syu ; pacman -S git
+
 git clone https://github.com/renanmarcs/install-arch.git
+
 cd install-arch
+
 chmod a+x install.sh
+
 ./install.sh
 
