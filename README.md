@@ -1,73 +1,84 @@
-# Load the keyboard mapping:
-(you can change to your country, like de-latin)
+# Install Arch Script
 
-loadkeys br-abnt2
+[![Project Status: WIP](http://www.repostatus.org/badges/latest/wip.svg)](http://www.repostatus.org/#wip)
 
+This is an simple script written in ShellScript and made for installing Arch Linux more easily and without typing so much. Initially I created this for personal use and for studying objectives, but you can use this for any reason. And if you want to help and contribute, is free and open source to do what you want.
 
-# Sync the clock:
+This is destined for intermediate/expert users, because doens't install all things from zero. This will only install and configures packages after mounting system in '/mnt' partition and changing to arch-chroot.
 
-timedatectl set-ntp true
+If you are newbie or don't know so much about Arch Linux, is recommended to read the [Arch Wiki](https://wiki.archlinux.org/).
 
+ATTENTION: I've not tested this script yet in an installation. I am not responsible for bad installation by now. If you find any bugs, please report into 'Issues' tab.
 
-# Shows an list of partitions:
+## An quick guide to installing Arch Linux and executing the script
 
-fdisk -l
+### Load the keyboard mapping:
+(you can change to your country, like *de-latin*)
 
+```sh
+$ loadkeys br-abnt2
+```
 
-# Format partitions and mark only Linux as bootable:
+### Sync the clock:
+```sh
+$ timedatectl set-ntp true
+```
 
-cfdisk
+### Shows an list of partitions:
 
+```sh
+$ fdisk -l
+```
 
-# Format partition X to ext4 and Y to swap (and active her):
+### Format partitions and mark only Linux as bootable:
 
-mkfs.ext4 /dev/sdaX
-mkswap /dev/sdaY
-swapon /dev/sdaY
+```sh
+$ cfdisk
+```
 
+### Format partition X to ext4 and Y to swap (and active her):
 
-# Mount partition X in /mnt:
+```sh
+$ mkfs.ext4 /dev/sdaX
+$ mkswap /dev/sdaY
+$ swapon /dev/sdaY
+```
 
-mount /dev/sdaX /mnt
+#### Mount partition X in /mnt:
+```sh
+$ mount /dev/sdaX /mnt
+```
 
+### Edit the mirrorlist and put the nearby server at the beggining:
+Go to the nearby server, use "CTRL + K" to cut and "CTRL + U" to paste at top. Save with "CTRL + O" and closes with "CTRL + X"
 
-# Edit the mirrorlist and put the nearby server at the beggining:
-Go to the nearby server, use "CTRL + K" to cut
-and "CTRL + U" to paste at top. Save with "CTRL + O" and closes
-with "CTRL + X"
+```sh
+$ nano /etc/pacman.d/mirrorlist
+```
 
-nano /etc/pacman.d/mirrorlist
+#### Use pacstrap script to install essentials packages in /mnt:
+```sh
+$ pacstrap -i /mnt base base-devel
+```
 
+#### Generate the fstab:
+```sh
+$ genfstab -U /mnt >> /mnt/etc/fstab
+```
+### Verify if the fstab is right (check if all partitions is here):
+```sh
+$ cat /mnt/etc/fstab
+```
 
-# Use pacstrap script to install essentials packages in /mnt:
+### Change the root shell to the new installed system:
+ ```sh
+$ arch-chroot /mnt
+```
 
-pacstrap -i /mnt base base-devel
-
-
-# Generate the fstab:
-
-genfstab -U /mnt >> /mnt/etc/fstab
-
-
-# Verify if the fstab is right (check if all partitions is here):
-
-cat /mnt/etc/fstab
-
-
-# Change the root shell to the new installed system:
-
-arch-chroot /mnt
-
-
-# Download and run the script:
-
-pacman -Syu ; pacman -S git
-
-git clone https://github.com/renanmarcs/install-arch.git
-
-cd install-arch
-
-chmod a+x install.sh
-
-./install.sh
-
+### Download and run the script:
+ ```sh
+$ pacman -Syu ; pacman -S git
+$ git clone https://github.com/renanmarcs/install-arch.git
+$ cd install-arch ; chmod a+x install.sh
+$ ./install.sh
+```
