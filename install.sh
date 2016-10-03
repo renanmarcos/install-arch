@@ -63,7 +63,7 @@ echo $hostvar > /etc/hostname
 # Installing and configuring Wi-fi/ethernet
 printf "
 Do you have an Wireless board and want to install Wi-fi drivers?
-Type 'yes' or 'no'
+Type 'yes' or 'no' (without quotes)
 "
 read option
 
@@ -88,8 +88,7 @@ passwd
 
 # Enable multilib
 printf "
-Scroll down and removes the '#' in multilib
-and left like this:
+Scroll down and removes the '#' in multilib and left like this:
 
 [multilib]
 Include = /etc/pacman.d/mirrorlist
@@ -109,7 +108,7 @@ function grub(){
 
 printf "
 Do you have an Intel CPU?
-Type 'yes' or 'no'
+Type 'yes' or 'no' (without quotes)
 "
 read intelOption
 if [ "$intelOption" = "yes" ]
@@ -146,7 +145,7 @@ pacman -S xorg-xinit xorg-utils xorg-server xorg-server-utils xorg-twm xorg-xclo
 # Installing video drivers
 printf "
 You have 'ati/amd', 'nvidia' or 'intel' graphics card?
-type ati, nvidia or intel:
+type 'ati', 'nvidia' or 'intel': (without quotes)
 "
 read gdrivers
 
@@ -164,7 +163,7 @@ fi
 # Check if is an Virtual Machine
 printf "
 Are you using Virtual Machine right now?
-Type 'yes' or 'no'
+Type 'yes' or 'no' (without quotes)
 "
 read vmachine
 
@@ -189,7 +188,7 @@ nano /etc/sudoers
 # Functions to choose Graphical Environment
 function gnome(){
 	echo "Do you want extra packages from GNOME? (gnome-extra)"
-	echo "type 'yes' or 'no'"
+	echo "type 'yes' or 'no' (without quotes)"
 	echo " "
 	read gnomeExtra
 		if [ "$gnomeExtra" = "yes" ]
@@ -205,7 +204,7 @@ function gnome(){
 
 function kde(){
 	echo "Do you want KDE Applications? (kde-applications)"
-	echo "type 'yes' or 'no'"
+	echo "type 'yes' or 'no' (without quotes)"
 	echo " "
 	read kdeApps
 		if [ "$kdeApps" = "yes" ]
@@ -221,7 +220,7 @@ function kde(){
 
 function deepin(){
 	echo "Do you want Deepin Extra applications? (deepin-extra)"
-	echo "type 'yes' or 'no'"
+	echo "type 'yes' or 'no' (without quotes)"
 	echo " "
 	read deepinExtra
 		if [ "$deepinExtra" = "yes" ]
@@ -239,7 +238,7 @@ function deepin(){
 
 function xfce(){
 	echo "Do you want extra plugins for XFCE? (xfce4-goodies)"
-	echo "type 'yes' or 'no'"
+	echo "type 'yes' or 'no' (without quotes)"
 	echo " "
 	read xfceExtra
 		if [ "$xfceExtra" = "yes" ]
@@ -286,7 +285,7 @@ systemctl enable networkmanager
 
 # Browser option
 echo "Do you want Chromium or Firefox as your browser?"
-echo "type 'chromium' or 'firefox'"
+echo "type 'chromium' or 'firefox' (without quotes)"
 echo " "
 read browserOption
 	if [ "$browserOption" = "chromium" ]
