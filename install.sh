@@ -39,17 +39,19 @@ Use 'CTRL + O' to save and 'CTRL + X' to exit
 "
 pause
 nano /etc/locale.gen
+locale-gen
 printf "Wich language you have uncommented?
-Type EXACTLY what you have uncommented (E.g: 'en_US.UTF-8')
+Type EXACTLY what you have uncommented (E.g: en_US.UTF-8)
 
 
 "
 read language
 echo LANG=$language > /etc/locale.conf
-printf "Type wich keymap you use: (E.g: 'br-abnt2')
+printf "Type wich keymap you use: (E.g: br-abnt2)
 "
 read keymap
 echo KEYMAP=$keymap > /etc/vconsole.conf
+localectl set-keymap --no-convert $keymap
 
 
 # Configuring hostname
@@ -144,7 +146,7 @@ pacman -S xorg-xinit xorg-utils xorg-server xorg-server-utils xorg-twm xorg-xclo
 # Installing video drivers
 printf "
 You have 'ati/amd', 'nvidia' or 'intel' graphics card?
-type 'ati', 'nvidia' or 'intel':
+type ati, nvidia or intel:
 "
 read gdrivers
 
@@ -154,7 +156,7 @@ then
 elif [ "$gdrivers" = "nvidia" ]
 then
     pacman -S nvidia
-		nvidia-xconfig
+    nvidia-xconfig
 else
     pacman -S xf86-video-intel mesa-demos
 fi
@@ -194,11 +196,9 @@ function gnome(){
 		then
 			pacman -S gnome gnome-extra gnome-shell gdm networkmanager
 			systemctl enable gdm
-			systemctl enable networkmanager
 		else
 			pacman -S gnome gnome-shell gdm networkmanager
 			systemctl enable gdm
-			systemctl enable networkmanager
 		fi
 }
 
@@ -212,10 +212,8 @@ function kde(){
 		then
 			pacman -S plasma kde-applications sddm networkmanager
 			systemctl enable sddm
-			systemctl enable networkmanager
 		else
 			pacman -S plasma sddm networkmanager
-			systemctl enable networkmanager
 			systemctl enable sddm
 		fi
 }
@@ -231,12 +229,10 @@ function deepin(){
 			pacman -S deepin deepin-extra deepin-session-ui networkmanager
 			ln -s /usr/bin/deepin-terminal /usr/bin/x-terminal-emulator
 			systemctl enable lightdm
-			systemctl enable networkmanager
 		else
 			pacman -S deepin deepin-session-ui networkmanager deepin-terminal
 			ln -s /usr/bin/deepin-terminal /usr/bin/x-terminal-emulator
 			systemctl enable lightdm
-			systemctl enable networkmanager
 		fi
 }
 
@@ -250,11 +246,9 @@ function xfce(){
 		then
 			pacman -S xfce4 xfce4-goodies lightdm-gtk-greeter networkmanager
 			systemctl enable lightdm
-			systemctl enable networkmanager
 		else
 			pacman -S xfce4 lightdm-gtk-greeter networkmanager
 			systemctl enable lightdm
-			systemctl enable networkmanager
 		fi
 }
 
@@ -262,33 +256,33 @@ function xfce(){
 function lxde(){
 	pacman -S lxde networkmanager
 	systemctl enable lxdm
-	systemctl enable networkmanager
 }
 
 
 function choose(){
-printf "
-Wich Graphical Environment you want? Type the NUMBER that you want:
+	printf "
+		Wich Graphical Environment you want? Type the NUMBER that you want:
 
-1. Gnome
-2. KDE
-3. Deepin
-4. XFCE
-5. LXDE
-"
-read num
+		1. Gnome
+		2. KDE
+		3. Deepin
+		4. XFCE
+		5. LXDE
+				"
+		read num
 
-case $num in
-	1) gnome ;;
-	2) kde ;;
-	3) deepin ;;
-	4) xfce ;;
-	5) lxde ;;
-	*) choose ;;
-esac
+	case $num in
+		1) gnome ;;
+		2) kde ;;
+		3) deepin ;;
+		4) xfce ;;
+		5) lxde ;;
+		*) choose ;;
+	esac
 }
-choose
 
+choose
+systemctl enable networkmanager
 
 # Browser option
 echo "Do you want Chromium or Firefox as your browser?"
@@ -304,7 +298,7 @@ read browserOption
 
 
 # Useful packages
-pacman -S unrar unrace lrzip unzip p7zip alsa-lib alsa-utils nautilus-open-terminal file-roller gparted android-tools gnome-system-monitor numlockx mtpfs wget
+pacman -S unrar unrace lrzip unzip p7zip alsa-lib alsa-utils nautilus-open-terminal file-roller gparted android-tools gnome-system-monitor numlockx mtpfs wget ntfs-3g evince vlc
 
 
 # Add android rules to working adb for android devices

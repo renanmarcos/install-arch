@@ -6,14 +6,14 @@ This is an simple script written in ShellScript and made for installing Arch Lin
 
 This is destined for intermediate/expert users, because doens't install all things from zero. This will only install and configures packages after mounting system in '/mnt' partition and changing to arch-chroot.
 
-If you are newbie or don't know so much about Arch Linux, is recommended to read the [Arch Wiki](https://wiki.archlinux.org/).
+If you are newbie or don't know so much about Arch Linux, it's recommended to read the [Arch Wiki](https://wiki.archlinux.org/).
 
-ATTENTION: I've not tested this script yet in an installation. I am not responsible for bad installation by now. If you find any bugs, please report into 'Issues' tab.
+ATTENTION: I've not tested this script yet in an installation. If you find any bugs, please report into 'Issues' tab.
 
 ## An quick guide to installing Arch Linux and executing the script
 
 ### Load the keyboard mapping:
-(you can change to your country, like *de-latin*)
+You can change according your country, like *de-latin1*
 
 ```sh
 $ loadkeys br-abnt2
@@ -44,7 +44,7 @@ $ mkswap /dev/sdaY
 $ swapon /dev/sdaY
 ```
 
-#### Mount partition X in /mnt:
+### Mount partition X in /mnt:
 ```sh
 $ mount /dev/sdaX /mnt
 ```
@@ -56,12 +56,12 @@ Go to the nearby server, use "CTRL + K" to cut and "CTRL + U" to paste at top. S
 $ nano /etc/pacman.d/mirrorlist
 ```
 
-#### Use pacstrap script to install essentials packages in /mnt:
+### Use pacstrap script to install essentials packages in /mnt:
 ```sh
 $ pacstrap -i /mnt base base-devel
 ```
 
-#### Generate the fstab:
+### Generate the fstab:
 ```sh
 $ genfstab -U /mnt >> /mnt/etc/fstab
 ```
