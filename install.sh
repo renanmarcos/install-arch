@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 
 # Function for pause command
 function pause(){
@@ -8,7 +8,8 @@ function pause(){
 # Shows an list of available regions
 ls /usr/share/zoneinfo
 echo " "
-echo "Select your region and type above:"
+echo "Select your REGION and type above:"
+echo " "
 read region
 echo " "
 echo " "
@@ -16,7 +17,8 @@ echo " "
 # Shows an list of available cities
 ls /usr/share/zoneinfo/$region/
 echo " "
-echo "Type your city above:"
+echo "Select your CITY and type above:"
+echo " "
 read city
 
 # Symlink selected region and city to localtime and set time to UTC
@@ -25,8 +27,9 @@ hwclock --systohc --utc
 
 
 # Configuring language and keymap
-printf "You will be redirected to edit file '/etc/locale.gen'
-please, uncomment the needed localizations
+printf "
+You will be redirected to edit file '/etc/locale.gen'
+please, uncomment the needed localization
 example: if you need 'en_US.UTF-8'... Go to line
 and removes the '#' before this
 
@@ -43,20 +46,23 @@ Type EXACTLY what you have uncommented (E.g: 'en_US.UTF-8')
 "
 read language
 echo LANG=$language > /etc/locale.conf
-printf "Type wich keymap you use: (E.g: 'br-abnt2')"
+printf "Type wich keymap you use: (E.g: 'br-abnt2')
+"
 read keymap
 echo KEYMAP=$keymap > /etc/vconsole.conf
 
 
 # Configuring hostname
 echo "Type wich hostname you want:"
+echo " "
 read hostvar
 echo $hostvar > /etc/hostname
 
 # Installing and configuring Wi-fi/ethernet
 printf "
 Do you have an Wireless board and want to install Wi-fi drivers?
-Type 'yes' or 'no'"
+Type 'yes' or 'no'
+"
 read option
 
 # Verify the option and install or not wpa and enable dhcpcd
@@ -93,9 +99,16 @@ nano /etc/pacman.conf
 pacman -Syu
 
 # Enable intel microcode updates
+function grub(){
+	pacman -S grub os-prober
+	grub-install --target=i386-pc /dev/sda
+	grub-mkconfig -o /boot/grub/grub.cfg
+}
+
 printf "
 Do you have an Intel CPU?
-Type 'yes' or 'no'"
+Type 'yes' or 'no'
+"
 read intelOption
 if [ "$intelOption" = "yes" ]
 then
@@ -105,14 +118,10 @@ else
 	grub
 fi
 
-function grub(){
-	pacman -S grub os-prober
-	grub-install --target=i386-pc /dev/sda
-	grub-mkconfig -o /boot/grub/grub.cfg
-}
 
 # Creating username and adding to groups
 echo "Wich username you want? Type above:"
+echo " "
 read usrname
 useradd -m -g users -G wheel -s /bin/bash $usrname
 printf "
@@ -127,7 +136,7 @@ pacman -S $(pacman -Ss ttf | grep -v ^” ” | awk ‘{print $1}’) && fc-cach
 
 # Installing and enabling notebook battery service
 pacman -S acpi acpid
-systemctl enable acpid.service 
+systemctl enable acpid
 
 # Installing X.Org and 3D drivers
 pacman -S xorg-xinit xorg-utils xorg-server xorg-server-utils xorg-twm xorg-xclock mesa
@@ -135,7 +144,8 @@ pacman -S xorg-xinit xorg-utils xorg-server xorg-server-utils xorg-twm xorg-xclo
 # Installing video drivers
 printf "
 You have 'ati/amd', 'nvidia' or 'intel' graphics card?
-type 'ati', 'nvidia' or 'intel':"
+type 'ati', 'nvidia' or 'intel':
+"
 read gdrivers
 
 if [ "$gdrivers" = "ati" ]
@@ -144,6 +154,7 @@ then
 elif [ "$gdrivers" = "nvidia" ]
 then
     pacman -S nvidia
+		nvidia-xconfig
 else
     pacman -S xf86-video-intel mesa-demos
 fi
@@ -165,7 +176,7 @@ pacman -S xf86-input-synaptics xf86-input-mouse xf86-input-keyboard
 
 # Add user to sudoers
 printf "
-Go to line that have 'ALL=(ALL) ALL' and add above this line type:
+Go to line that have 'ALL=(ALL) ALL' and above this line type:
 
 $usrname ALL=(ALL) ALL
 
@@ -173,4 +184,138 @@ $usrname ALL=(ALL) ALL
 pause
 nano /etc/sudoers
 
-# Graphical Environment
+# Functions to choose Graphical Environment
+function gnome(){
+	echo "Do you want extra packages from GNOME? (gnome-extra)"
+	echo "type 'yes' or 'no'"
+	echo " "
+	read gnomeExtra
+		if [ "$gnomeExtra" = "yes" ]
+		then
+			pacman -S gnome gnome-extra gnome-shell gdm networkmanager
+			systemctl enable gdm
+			systemctl enable networkmanager
+		else
+			pacman -S gnome gnome-shell gdm networkmanager
+			systemctl enable gdm
+			systemctl enable networkmanager
+		fi
+}
+
+
+function kde(){
+	echo "Do you want KDE Applications? (kde-applications)"
+	echo "type 'yes' or 'no'"
+	echo " "
+	read kdeApps
+		if [ "$kdeApps" = "yes" ]
+		then
+			pacman -S plasma kde-applications sddm networkmanager
+			systemctl enable sddm
+			systemctl enable networkmanager
+		else
+			pacman -S plasma sddm networkmanager
+			systemctl enable networkmanager
+			systemctl enable sddm
+		fi
+}
+
+
+function deepin(){
+	echo "Do you want Deepin Extra applications? (deepin-extra)"
+	echo "type 'yes' or 'no'"
+	echo " "
+	read deepinExtra
+		if [ "$deepinExtra" = "yes" ]
+		then
+			pacman -S deepin deepin-extra deepin-session-ui networkmanager
+			ln -s /usr/bin/deepin-terminal /usr/bin/x-terminal-emulator
+			systemctl enable lightdm
+			systemctl enable networkmanager
+		else
+			pacman -S deepin deepin-session-ui networkmanager deepin-terminal
+			ln -s /usr/bin/deepin-terminal /usr/bin/x-terminal-emulator
+			systemctl enable lightdm
+			systemctl enable networkmanager
+		fi
+}
+
+
+function xfce(){
+	echo "Do you want extra plugins for XFCE? (xfce4-goodies)"
+	echo "type 'yes' or 'no'"
+	echo " "
+	read xfceExtra
+		if [ "$xfceExtra" = "yes" ]
+		then
+			pacman -S xfce4 xfce4-goodies lightdm-gtk-greeter networkmanager
+			systemctl enable lightdm
+			systemctl enable networkmanager
+		else
+			pacman -S xfce4 lightdm-gtk-greeter networkmanager
+			systemctl enable lightdm
+			systemctl enable networkmanager
+		fi
+}
+
+
+function lxde(){
+	pacman -S lxde networkmanager
+	systemctl enable lxdm
+	systemctl enable networkmanager
+}
+
+
+function choose(){
+printf "
+Wich Graphical Environment you want? Type the NUMBER that you want:
+
+1. Gnome
+2. KDE
+3. Deepin
+4. XFCE
+5. LXDE
+"
+read num
+
+case $num in
+	1) gnome ;;
+	2) kde ;;
+	3) deepin ;;
+	4) xfce ;;
+	5) lxde ;;
+	*) choose ;;
+esac
+}
+choose
+
+
+# Browser option
+echo "Do you want Chromium or Firefox as your browser?"
+echo "type 'chromium' or 'firefox'"
+echo " "
+read browserOption
+	if [ "$browserOption" = "chromium" ]
+	then
+		pacman -S chromium
+	else
+		pacman -S firefox
+	fi
+
+
+# Useful packages
+pacman -S unrar unrace lrzip unzip p7zip alsa-lib alsa-utils nautilus-open-terminal file-roller gparted android-tools gnome-system-monitor numlockx mtpfs wget
+
+
+# Add android rules to working adb for android devices
+wget -S -O - http://source.android.com/source/51-android.rules | sed "s/<username>/$USER/" | sudo tee >/dev/null /etc/udev/rules.d/51-android.rules; sudo udevadm control --reload-rules
+
+
+# Finish the script
+printf "All important packages have been succefully installed.
+Thanks for using this script! Now this will exit from arch-chroot.
+Type 'reboot' to reboot and start using your new Arch Linux!
+
+Created by Renan Marcos (github.com/renanmarcs)"
+pause
+exit
