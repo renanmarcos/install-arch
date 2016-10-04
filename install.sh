@@ -291,7 +291,7 @@ read browserOption
 
 
 # Useful packages
-pacman -S unrar unrace lrzip unzip p7zip alsa-lib alsa-utils nautilus-open-terminal file-roller gparted android-tools numlockx mtpfs wget ntfs-3g evince vlc yaourt
+pacman -S unrar unrace lrzip unzip p7zip alsa-lib alsa-utils nautilus-open-terminal file-roller gparted android-tools numlockx mtpfs wget ntfs-3g evince vlc yaourt qt4
 yaourt -S wps-office jdk --noconfirm
 
 
