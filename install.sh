@@ -87,16 +87,8 @@ passwd
 
 
 # Enable multilib
-printf "
-Scroll down and removes the '#' in multilib and left like this:
-
-[multilib]
-Include = /etc/pacman.d/mirrorlist
-
-
-Exit using 'CTRL + O' and 'CTRL + X'
-"
-nano /etc/pacman.conf
+rm -rf /etc/pacman.conf
+cp pacman-conf/pacman.conf /etc/pacman.conf
 pacman -Syu
 
 # Enable intel microcode updates
@@ -134,6 +126,8 @@ usermod -aG adm,ftp,games,http,log,rfkill,sys,systemd-journal,users,uucp,audio,d
 
 # Installing fonts for better rendering
 pacman -S $(pacman -Ss ttf | grep -v ^” ” | awk ‘{print $1}’) && fc-cache
+cp font-render/fonts.conf /home/$usrname/.config/fontconfig/fonts.conf
+fc-cache --really-force
 
 # Installing and enabling notebook battery service
 pacman -S acpi acpid
@@ -225,7 +219,7 @@ function deepin(){
 	read deepinExtra
 		if [ "$deepinExtra" = "yes" ]
 		then
-			pacman -S deepin deepin-extra deepin-session-ui networkmanager
+			pacman -S deepin deepin-extra deepin-session-ui networkmanager gnome-calculator gnome-system-monitor
 			ln -s /usr/bin/deepin-terminal /usr/bin/x-terminal-emulator
 			systemctl enable lightdm
 		else
@@ -297,7 +291,8 @@ read browserOption
 
 
 # Useful packages
-pacman -S unrar unrace lrzip unzip p7zip alsa-lib alsa-utils nautilus-open-terminal file-roller gparted android-tools gnome-system-monitor numlockx mtpfs wget ntfs-3g evince vlc
+pacman -S unrar unrace lrzip unzip p7zip alsa-lib alsa-utils nautilus-open-terminal file-roller gparted android-tools numlockx mtpfs wget ntfs-3g evince vlc yaourt
+yaourt -S wps-office jdk --noconfirm
 
 
 # Add android rules to working adb for android devices
