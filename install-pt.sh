@@ -2,30 +2,14 @@
 
 # Function for pause command
 function pause(){
-	read -p "Press [Enter] to proceed..."
+	read -p "Pressione [Enter] para continuar..."
 }
-
-# Select language option
-	printf "
-Wich language do you speak? Type the NUMBER:
-Qual língua você fala? Digite o NÚMERO:
-
-			1. English
-			2. Português
-			
-"
-		read scriptLanguage
-
-		if [ "$scriptLanguage" = "2" ]
-			then
-			./install-pt.sh
-		fi
 
 # Shows an list of available regions
 echo " "
 ls /usr/share/zoneinfo
 printf "
-Select your REGION and type above:
+Selecione sua REGIÃO e digite abaixo:
 "
 read region
 echo " "
@@ -33,7 +17,7 @@ echo " "
 # Shows an list of available cities
 ls /usr/share/zoneinfo/$region/
 printf " 
-Select your CITY and type above:
+Selecione sua CIDADE e digite abaixo:
 "
 read city
 
@@ -44,49 +28,36 @@ hwclock --systohc --utc
 
 # Configuring language and keymap
 printf "
-You will be redirected to edit file '/etc/locale.gen'
-please, uncomment the needed localization
-example: if you need 'en_US.UTF-8'... Go to line
-and removes the '#' before this.
+Você será redirecionado para editar o arquivo '/etc/locale.gen'
+por favor, descomente a linha de localização brasileira.
 
-Use 'CTRL + O' to save and 'CTRL + X' to exit.
+Vá para a linha que corresponda à 'pt_BR.UTF-8' e retire o '#' antes dela.
 
+Use 'CTRL + O' para salvar e 'CTRL + X' para sair.
 
 "
 pause
 nano /etc/locale.gen
 locale-gen
-printf "
-Wich language you have uncommented?
-Type EXACTLY what you have uncommented (E.g: en_US.UTF-8)
-
-
-"
-read language
-echo LANG=$language > /etc/locale.conf
-printf "
-Type wich keymap you use: (E.g: de-latin1)
-
-"
-read keymap
-echo KEYMAP=$keymap > /etc/vconsole.conf
-localectl set-keymap --no-convert $keymap
+echo LANG=pt_BR.UTF-8 > /etc/locale.conf
+echo KEYMAP=br-abnt2 > /etc/vconsole.conf
+localectl set-keymap --no-convert br-abnt2
 
 
 # Configuring hostname
 printf "
-Type wich hostname you want:
+Digite o nome de host (hostname) que você quer dar para sua máquina:
 "
 read hostvar
 echo $hostvar > /etc/hostname
 
 # Installing and configuring Wi-fi/ethernet
 printf "
-Do you have an Wireless board and want to install Wi-fi drivers?
-Type the number:
+Você possui uma placa Wi-fi e quer instalar os drivers?
+Digite o número correspondente:
 	
-	1. Yes
-	2. No
+	1. Sim 
+	2. Não
 "
 read option
 
@@ -105,7 +76,7 @@ mkinitcpio -p linux
 
 # Configure root password
 printf "
-Type your ROOT password:
+Digite sua senha de ROOT:
 "
 passwd
 
@@ -124,11 +95,11 @@ function grub(){
 }
 
 printf "
-Do you have an Intel CPU?
-Type the number:
+Você tem um processador Intel?
+Digite o número correspondente:
 	
-	1. Yes
-	2. No
+	1. Sim 
+	2. Não
 "
 read intelOption
 if [ "$intelOption" = "1" ]
@@ -142,12 +113,12 @@ fi
 
 # Creating username and adding to groups
 printf "
-Wich username you want? Type above:
+Qual usuário você quer? Digite abaixo:
 "
 read usrname
 useradd -m -g users -G wheel -s /bin/bash $usrname
 printf "
-Type an password for you user account:
+Digite uma senha para sua conta de usuário:
 "
 passwd $usrname
 groupadd adbusers
@@ -167,11 +138,10 @@ pacman -S xorg-xinit xorg-utils xorg-server xorg-server-utils xorg-twm xorg-xclo
 
 # Installing video drivers
 printf "
-You have 'ati/amd', 'nvidia' or 'intel' graphics card?
-Type the number:
+Você possui qual placa de vídeo? Digite o número:
 	
 	1. ATI/AMD
-	2. Nvidia 
+	2. Nvidia
 	3. Intel
 "
 read gdrivers
@@ -189,11 +159,11 @@ fi
 
 # Check if is an Virtual Machine
 printf "
-Are you using Virtual Machine right now?
-Type the number:
+Você está usando uma máquina virtual agora? 
+Digite o número correspondente:
 	
-	1. Yes
-	2. No
+	1. Sim
+	2. Não
 "
 read vmachine
 
@@ -207,7 +177,7 @@ pacman -S xf86-input-synaptics xf86-input-mouse xf86-input-keyboard
 
 # Add user to sudoers
 printf "
-Go to line that have 'ALL=(ALL) ALL' and above this line type:
+Vá para a linha que possui 'ALL=(ALL) ALL' e digite ABAIXO dessa linha:
 
 $usrname ALL=(ALL) ALL
 
@@ -218,11 +188,11 @@ nano /etc/sudoers
 # Functions to choose Graphical Environment
 function gnome(){
 	printf "
-Do you want extra packages from GNOME? (gnome-extra)
-Type the number:
-	
-	1. Yes
-	2. No
+Você quer instalar os pacotes extras do GNOME? (gnome-extra)
+Digite o número correspondente:
+
+	1. Sim
+	2. Não
 "
 	read gnomeExtra
 		if [ "$gnomeExtra" = "1" ]
@@ -238,11 +208,11 @@ Type the number:
 
 function kde(){
 	printf "
-Do you want KDE Applications? (kde-applications)
-Type the number:
-	
-	1. Yes
-	2. No
+Você quer os aplicativos do KDE? (kde-applications)
+Digite o número correspondente:
+
+	1. Sim
+	2. Não
 "
 	read kdeApps
 		if [ "$kdeApps" = "1" ]
@@ -258,11 +228,11 @@ Type the number:
 
 function deepin(){
 	printf "
-Do you want Deepin Extra applications? (deepin-extra)
-Type the number:
-	
-	1. Yes
-	2. No
+Você quer os aplicativos extra do Deepin? (deepin-extra)
+Digite o número correspondente:
+
+	1. Sim
+	2. Não
 "
 	read deepinExtra
 		if [ "$deepinExtra" = "1" ]
@@ -280,11 +250,11 @@ Type the number:
 
 function xfce(){
 	printf "
-Do you want extra plugins for XFCE? (xfce4-goodies)
-Type the number:
-	
-	1. Yes
-	2. No
+Você quer os plugins extras do XFCE? (xfce4-goodies)
+Digite o número correspondente:
+
+	1. Sim
+	2. Não
 "
 	read xfceExtra
 		if [ "$xfceExtra" = "1" ]
@@ -306,7 +276,7 @@ function lxde(){
 
 function choose(){
 	printf "
-Wich Graphical Environment you want? Type the NUMBER that you want:
+Qual ambiente gráfico você quer? Digite o número correspondente:
 
 		1. Gnome
 		2. KDE
@@ -331,10 +301,10 @@ systemctl enable networkmanager
 
 # Browser option
 printf "
-Do you want Chromium, Firefox or Google Chrome as your browser?
-Type the number:
+Você quer o Chromium, Firefox ou Google Chrome como seu navegador?
+Digite o número correspondente:
 
-	1. Chromium (open source version)
+	1. Chromium (versão de código aberto)
 	2. Firefox
 	3. Google Chrome
 "
@@ -360,11 +330,12 @@ wget -S -O - http://source.android.com/source/51-android.rules | sed "s/<usernam
 
 # Finish the script
 printf "
-All important packages have been succefully installed.
-Thanks for using this script! Now this will exit from arch-chroot.
-Type 'reboot' (without quotes) to reboot and start using your new Arch Linux!
+Todos os pacotes principais foram instalados com sucesso.
+Obrigado por usar esse script! Agora ele irá sair do arch-chroot.
 
-Created by Renan Marcos (github.com/renanmarcs)
+Digite 'reboot' (sem aspas) para reiniciar e começar a usar seu novo Arch Linux!
+
+Criado por Renan Marcos (github.com/renanmarcs)
 "
 pause
 exit
