@@ -40,6 +40,7 @@ pause
 nano /etc/locale.gen
 locale-gen
 echo LANG=pt_BR.UTF-8 > /etc/locale.conf
+export LANG=pt_BR.UTF-8
 echo KEYMAP=br-abnt2 > /etc/vconsole.conf
 
 

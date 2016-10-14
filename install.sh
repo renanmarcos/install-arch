@@ -64,6 +64,7 @@ Type EXACTLY what you have uncommented (E.g: en_US.UTF-8)
 "
 read language
 echo LANG=$language > /etc/locale.conf
+export LANG=$language
 printf "
 Type wich keymap you use: (E.g: de-latin1)
 
