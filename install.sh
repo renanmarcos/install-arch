@@ -155,6 +155,7 @@ usermod -aG adm,ftp,games,http,log,rfkill,sys,systemd-journal,users,uucp,audio,d
 
 # Installing fonts for better rendering
 pacman -S $(pacman -Ss ttf | grep -v ^" " | awk '{print $1}') && fc-cache
+mkdir -p /home/$usrname/.config/fontconfig
 cp font-render/fonts.conf /home/$usrname/.config/fontconfig/fonts.conf
 fc-cache --really-force
 
