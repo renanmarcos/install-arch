@@ -154,7 +154,7 @@ groupadd adbusers
 usermod -aG adm,ftp,games,http,log,rfkill,sys,systemd-journal,users,uucp,audio,disk,floppy,input,optical,scanner,storage,video,adbusers $usrname
 
 # Installing fonts for better rendering
-pacman -S $(pacman -Ss ttf | grep -v ^” ” | awk ‘{print $1}’) && fc-cache
+pacman -S $(pacman -Ss ttf | grep -v ^" " | awk '{print $1}') && fc-cache
 cp font-render/fonts.conf /home/$usrname/.config/fontconfig/fonts.conf
 fc-cache --really-force
 
