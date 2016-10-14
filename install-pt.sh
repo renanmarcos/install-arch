@@ -314,6 +314,7 @@ read browserOption
 	then
 		pacman -S chromium
 	elif [ "$browserOption" = "2" ]
+	then
 		pacman -S firefox
 	else
 		yaourt -S google-chrome --noconfirm
