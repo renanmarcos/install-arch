@@ -70,7 +70,6 @@ Type wich keymap you use: (E.g: de-latin1)
 "
 read keymap
 echo KEYMAP=$keymap > /etc/vconsole.conf
-localectl set-keymap --no-convert $keymap
 
 
 # Configuring hostname
