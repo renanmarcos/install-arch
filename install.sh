@@ -123,7 +123,7 @@ setfacl -m u::rwx,g::rwx /home/build
 setfacl -d --set u::rwx,g::rwx,o::- /home/build
 
 # Install yaourt
-cd ..
+cd /home/build
 git clone https://aur.archlinux.org/package-query.git
 chmod -R g+w package-query/
 cd package-query
@@ -136,6 +136,7 @@ sudo -u nobody makepkg -sri
 cd ..
 rm -rf package-query
 rm -rf yaourt
+cd /
 
 # Enable intel microcode updates
 function grub(){
