@@ -86,14 +86,21 @@ rm -rf /etc/pacman.conf
 cp pacman-conf/pacman.conf /etc/pacman.conf
 pacman -Syu
 
+# Temporary permission to run yaourt
+mkdir /home/build
+chgrp nobody /home/build
+chmod g+ws /home/build
+setfacl -m u::rwx,g::rwx /home/build
+setfacl -d --set u::rwx,g::rwx,o::- /home/build
+
 # Install yaourt
 git clone https://aur.archlinux.org/package-query.git
 cd package-query
-makepkg -sri
+sudo -u nobody makepkg -sri
 cd ..
 git clone https://aur.archlinux.org/yaourt.git
 cd yaourt
-makepkg -sri
+sudo -u nobody makepkg -sri
 cd ..
 rm -rf package-query
 rm -rf yaourt
@@ -311,13 +318,6 @@ Qual ambiente gráfico você quer? Digite o número correspondente:
 choose
 systemctl enable networkmanager
 
-# Temporary permission to run yaourt
-mkdir /home/build
-chgrp nobody /home/build
-chmod g+ws /home/build
-setfacl -m u::rwx,g::rwx /home/build
-setfacl -d --set u::rwx,g::rwx,o::- /home/build
-
 # Browser option
 printf "
 Você quer o Chromium, Firefox ou Google Chrome como seu navegador?
@@ -343,6 +343,8 @@ read browserOption
 pacman -S unrar lrzip unzip p7zip alsa-lib alsa-utils nautilus-open-terminal file-roller gparted android-tools numlockx mtpfs wget ntfs-3g evince vlc qt4
 sudo -u nobody yaourt -S jdk --noconfirm
 
+# Remove temporary yaourt permissions
+rm -rf /home/build
 
 # Add android rules to working adb for android devices
 wget -S -O - http://source.android.com/source/51-android.rules | sed "s/<username>/$USER/" | sudo tee >/dev/null /etc/udev/rules.d/51-android.rules; sudo udevadm control --reload-rules

@@ -115,14 +115,21 @@ rm -rf /etc/pacman.conf
 cp pacman-conf/pacman.conf /etc/pacman.conf
 pacman -Syu
 
+# Temporary permission to run yaourt
+mkdir /home/build
+chgrp nobody /home/build
+chmod g+ws /home/build
+setfacl -m u::rwx,g::rwx /home/build
+setfacl -d --set u::rwx,g::rwx,o::- /home/build
+
 # Install yaourt
 git clone https://aur.archlinux.org/package-query.git
 cd package-query
-makepkg -sri
+sudo -u nobody makepkg -sri
 cd ..
 git clone https://aur.archlinux.org/yaourt.git
 cd yaourt
-makepkg -sri
+sudo -u nobody makepkg -sri
 cd ..
 rm -rf package-query
 rm -rf yaourt
@@ -341,13 +348,6 @@ Wich Graphical Environment you want? Type the NUMBER that you want:
 
 choose
 systemctl enable networkmanager
-
-# Temporary permission to run yaourt
-mkdir /home/build
-chgrp nobody /home/build
-chmod g+ws /home/build
-setfacl -m u::rwx,g::rwx /home/build
-setfacl -d --set u::rwx,g::rwx,o::- /home/build
 
 # Browser option
 printf "
