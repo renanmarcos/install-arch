@@ -110,11 +110,22 @@ Type your ROOT password:
 passwd
 
 
-# Enable multilib and install yaourt
+# Enable multilib
 rm -rf /etc/pacman.conf
 cp pacman-conf/pacman.conf /etc/pacman.conf
 pacman -Syu
-pacman -S yaourt
+
+# Install yaourt
+git clone https://aur.archlinux.org/package-query.git
+cd package-query
+makepkg -sri
+cd ..
+git clone https://aur.archlinux.org/yaourt.git
+cd yaourt
+makepkg -sri
+cd ..
+rm -rf package-query
+rm -rf yaourt
 
 # Enable intel microcode updates
 function grub(){
@@ -215,6 +226,7 @@ $usrname ALL=(ALL) ALL
 "
 pause
 nano /etc/sudoers
+
 
 # Functions to choose Graphical Environment
 function gnome(){
@@ -330,6 +342,13 @@ Wich Graphical Environment you want? Type the NUMBER that you want:
 choose
 systemctl enable networkmanager
 
+# Temporary permission to run yaourt
+mkdir /home/build
+chgrp nobody /home/build
+chmod g+ws /home/build
+setfacl -m u::rwx,g::rwx /home/build
+setfacl -d --set u::rwx,g::rwx,o::- /home/build
+
 # Browser option
 printf "
 Do you want Chromium, Firefox or Google Chrome as your browser?
@@ -347,14 +366,16 @@ read browserOption
 	then
 		pacman -S firefox
 	else
-		yaourt -S google-chrome --noconfirm
+		sudo -u nobody yaourt -S google-chrome --noconfirm
 	fi
 
 
 # Useful packages
-pacman -S unrar unrace lrzip unzip p7zip alsa-lib alsa-utils nautilus-open-terminal file-roller gparted android-tools numlockx mtpfs wget ntfs-3g evince vlc qt4
-yaourt -S wps-office jdk --noconfirm
+pacman -S unrar lrzip unzip p7zip alsa-lib alsa-utils nautilus-open-terminal file-roller gparted android-tools numlockx mtpfs wget ntfs-3g evince vlc qt4
+sudo -u nobody yaourt -S jdk --noconfirm
 
+# Remove temporary yaourt permissions
+rm -rf /home/build
 
 # Add android rules to working adb for android devices
 wget -S -O - http://source.android.com/source/51-android.rules | sed "s/<username>/$USER/" | sudo tee >/dev/null /etc/udev/rules.d/51-android.rules; sudo udevadm control --reload-rules
