@@ -123,11 +123,14 @@ setfacl -m u::rwx,g::rwx /home/build
 setfacl -d --set u::rwx,g::rwx,o::- /home/build
 
 # Install yaourt
+cd ..
 git clone https://aur.archlinux.org/package-query.git
+chmod -R g+w package-query/
 cd package-query
 sudo -u nobody makepkg -sri
 cd ..
 git clone https://aur.archlinux.org/yaourt.git
+chmod -R g+w yaourt/
 cd yaourt
 sudo -u nobody makepkg -sri
 cd ..
